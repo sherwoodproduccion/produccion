@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quevedo · Producción Semanal</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #111010;
+  --s1: #1a1918;
+  --s2: #222120;
+  --s3: #2a2927;
+  --border: #333230;
+  --red: #c0392b;
+  --red2: #e74c3c;
+  --amber: #d4821a;
+  --amber2: #f39c12;
+  --green: #1e8449;
+  --green2: #27ae60;
+  --blue: #1a6b9a;
+  --blue2: #2980b9;
+  --text: #ede9e3;
+  --muted: #7a7570;
+  --muted2: #5a5550;
+  --accent: #c8a96e;
+  --accent2: #e2c98e;
+  --ff: 'Barlow', sans-serif;
+  --fc: 'Barlow Condensed', sans-serif;
+  --fd: 'Bebas Neue', cursive;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--ff);font-size:14px;min-height:100vh}
+
+/* ── HEADER ── */
+header{
+  background:var(--s1);
+  border-bottom:2px solid var(--red);
+  padding:0 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  height:58px;
+  position:sticky;top:0;z-index:50;
+}
+.logo{font-family:var(--fd);font-size:28px;letter-spacing:2px;color:var(--accent);line-height:1}
+.logo em{color:var(--muted);font-style:normal;font-size:13px;font-family:var(--ff);font-weight:300;margin-left:10px;letter-spacing:0.5px}
+.hdr-right{display:flex;gap:8px;align-items:center}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--s1);padding:0 32px;position:sticky;top:58px;z-index:40}
+.tab{
+  font-family:var(--fc);font-size:13px;font-weight:600;letter-spacing:1px;text-transform:uppercase;
+  padding:12px 20px;cursor:pointer;border-bottom:2px solid transparent;color:var(--muted);
+  transition:all .2s;white-space:nowrap;
+}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab:hover:not(.active){color:var(--text)}
+
+/* ── MAIN ── */
+main{padding:24px 32px;max-width:1500px;margin:0 auto}
+.view{display:none}.view.active{display:block}
+
+/* ── KPIs ── */
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px}
+.kpi{
+  background:var(--s1);border:1px solid var(--border);border-radius:8px;
+  padding:16px 20px;position:relative;overflow:hidden;
+}
+.kpi-accent{position:absolute;top:0;left:0;width:3px;height:100%;background:var(--accent)}
+.kpi-label{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:6px}
+.kpi-val{font-family:var(--fd);font-size:30px;color:var(--accent2);line-height:1}
+.kpi-sub{font-size:11px;color:var(--muted);margin-top:3px}
+
+/* ── WEEK NAV ── */
+.week-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  background:var(--s1);border:1px solid var(--border);border-radius:8px;
+  padding:12px 20px;margin-bottom:20px;
+}
+.week-label{font-family:var(--fc);font-size:15px;font-weight:600;color:var(--accent)}
+.week-nav{display:flex;gap:6px;align-items:center}
+
+/* ── BUTTONS ── */
+.btn{border:none;border-radius:5px;cursor:pointer;font-family:var(--ff);font-size:13px;font-weight:500;padding:7px 14px;transition:all .18s;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.btn-red{background:var(--red);color:#fff}.btn-red:hover{background:var(--red2)}
+.btn-amber{background:var(--amber);color:#fff}.btn-amber:hover{background:var(--amber2)}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text)}.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.btn-green{background:var(--green);color:#fff}.btn-green:hover{background:var(--green2)}
+.btn-sm{padding:5px 10px;font-size:12px}
+.btn-xs{padding:3px 7px;font-size:11px}
+
+/* ── SECTION HEADER ── */
+.sec-hdr{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:12px;
+}
+.sec-title{font-family:var(--fc);font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.sec-title::before{content:'';display:block;width:3px;height:16px;background:var(--red);border-radius:2px}
+
+/* ── TABLE ── */
+.tbl-wrap{background:var(--s1);border:1px solid var(--border);border-radius:8px;overflow-x:auto;overflow-y:visible;margin-bottom:24px}
+table{width:100%;border-collapse:collapse}
+thead th{
+  background:var(--s2);font-family:var(--fc);font-size:11px;font-weight:600;
+  text-transform:uppercase;letter-spacing:1px;color:var(--muted);
+  padding:10px 12px;text-align:left;white-space:nowrap;border-bottom:1px solid var(--border);
+}
+thead th.num{text-align:right}
+tbody tr{border-top:1px solid var(--border);transition:background .12s}
+tbody tr:hover{background:var(--s2)}
+td{padding:9px 12px;vertical-align:middle;font-size:13px}
+td.num{text-align:right;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600}
+td.product-name{font-weight:600;font-family:var(--fc);font-size:14px}
+td.product-sku{font-size:11px;color:var(--muted);font-family:var(--fc)}
+
+/* ── INPUT IN TABLE ── */
+.qty-input{
+  background:var(--s3);border:1px solid var(--border);border-radius:4px;
+  color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;
+  padding:5px 8px;width:80px;text-align:right;outline:none;transition:border-color .15s;
+}
+.qty-input:focus{border-color:var(--accent)}
+.qty-input.changed{border-color:var(--amber);background:rgba(212,130,26,0.1)}
+
+/* ── BADGES ── */
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;font-family:var(--fc);letter-spacing:.5px}
+.badge-ok{background:rgba(30,132,73,0.2);color:#2ecc71}
+.badge-warn{background:rgba(212,130,26,0.2);color:#f39c12}
+.badge-low{background:rgba(192,57,43,0.2);color:#e74c3c}
+.badge-aprox{background:rgba(26,107,154,0.2);color:#5dade2}
+
+/* ── PRODUCIR HIGHLIGHT ── */
+.producir-cell{
+  font-family:var(--fd);font-size:20px;
+}
+.producir-cell.high{color:#e74c3c}
+.producir-cell.mid{color:#f39c12}
+.producir-cell.ok{color:#2ecc71}
+
+/* ── PROGRESS BAR ── */
+.stock-bar{width:80px;height:6px;background:var(--s3);border-radius:3px;overflow:hidden;display:inline-block;vertical-align:middle;margin-right:6px}
+.stock-bar-fill{height:100%;border-radius:3px;transition:width .3s}
+
+/* ── MODAL ── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+.overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:28px;width:460px;max-width:95vw;transform:translateY(8px);transition:transform .2s}
+.overlay.open .modal{transform:translateY(0)}
+.modal-title{font-family:var(--fd);font-size:22px;color:var(--accent);margin-bottom:20px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fg{margin-bottom:14px}
+.fg label{display:block;font-size:10px;text-transform:uppercase;letter-spacing:1.2px;color:var(--muted);margin-bottom:5px}
+.fg input,.fg select{width:100%;background:var(--s2);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:var(--ff);font-size:13px;padding:8px 10px;outline:none;transition:border-color .15s}
+.fg input:focus,.fg select:focus{border-color:var(--accent)}
+.fg input::placeholder{color:var(--muted2)}
+.modal-actions{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;padding-top:16px;border-top:1px solid var(--border)}
+
+/* ── WEEK HISTORY TABLE ── */
+.week-grid{display:grid;grid-template-columns:200px repeat(6,1fr) 1fr 1fr;gap:0;background:var(--s1);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:24px}
+.wg-hdr{background:var(--s2);font-family:var(--fc);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);padding:9px 10px;border-bottom:1px solid var(--border)}
+.wg-hdr.cur{color:var(--accent)}
+.wg-cell{padding:8px 10px;border-top:1px solid var(--border);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:500;display:flex;align-items:center}
+.wg-cell.name{font-weight:700;font-size:13px;font-family:var(--fc)}
+.wg-cell.num{justify-content:flex-end}
+.wg-cell.avg{color:var(--accent2);font-weight:700}
+.wg-cell.max{color:#5dade2;font-weight:700}
+.wg-row:nth-child(even) .wg-cell{background:rgba(255,255,255,.02)}
+
+/* ── ALERT ── */
+.alert-bar{background:rgba(192,57,43,.12);border:1px solid rgba(192,57,43,.3);border-radius:7px;padding:10px 16px;margin-bottom:20px;font-size:13px;color:#e74c3c;display:flex;gap:8px;align-items:center}
+
+/* ── SCROLL ── */
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+/* ── RESPONSIVE ── */
+@media(max-width:800px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  header{padding:0 16px}
+  .tabs{padding:0 16px;overflow-x:auto}
+  main{padding:16px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Quevedo<em>· Carnes</em></div>
+  <div class="hdr-right">
+    <button class="btn btn-ghost btn-sm" onclick="exportCSV()">⬇ CSV</button>
+    <button class="btn btn-sm" style="background:transparent;border:1px solid var(--amber);color:var(--amber)" onclick="resetProducts()">🔄 Reset</button>
+    <button class="btn btn-red btn-sm" onclick="openAddModal()">+ Producto</button>
+  </div>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="showView('stock','this')">📦 Stock & Producir</div>
+  <div class="tab" onclick="showView('ventas','this')">📊 Ventas Semanales</div>
+  <div class="tab" onclick="showView('historial','this')">📈 Historial 6 Semanas</div>
+</div>
+
+<main>
+
+<!-- ════════════ VIEW: STOCK ════════════ -->
+<div class="view active" id="view-stock">
+
+  <div class="kpis" id="kpis"></div>
+
+  <div id="alertBar" class="alert-bar" style="display:none"></div>
+
+  <!-- SUCURSAL GRILL -->
+  <div class="sec-hdr">
+    <div class="sec-title">Sucursal Grill</div>
+    <div style="display:flex;gap:6px">
+      <button class="btn btn-ghost btn-sm" onclick="saveAllStock()">💾 Guardar stock</button>
+    </div>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr>
+        <th>Producto</th>
+        <th class="num">Stock Actual</th>
+        <th class="num">Prom/Semana</th>
+        <th class="num">Máx/Semana</th>
+        <th class="num">Stock Mínimo</th>
+        <th class="num">A Producir</th>
+        <th>Estado</th>
+      </tr></thead>
+      <tbody id="tbody-grill"></tbody>
+    </table>
+  </div>
+
+  <!-- SUCURSAL EXPRESS -->
+  <div class="sec-hdr">
+    <div class="sec-title">Sucursal Express</div>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr>
+        <th>Producto</th>
+        <th class="num">Stock Actual</th>
+        <th class="num">Prom/Semana</th>
+        <th class="num">Máx/Semana</th>
+        <th class="num">Stock Mínimo</th>
+        <th class="num">A Producir</th>
+        <th>Estado</th>
+      </tr></thead>
+      <tbody id="tbody-express"></tbody>
+    </table>
+  </div>
+
+  <!-- QUEVEDO GRILL -->
+  <div class="sec-hdr">
+    <div class="sec-title">Quevedo Grill</div>
+    <button class="btn btn-ghost btn-sm" onclick="openAddModalSuc('quevedo-grill')">+ Producto</button>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr>
+        <th>Producto</th>
+        <th class="num">Stock Actual</th>
+        <th class="num">Prom/Semana</th>
+        <th class="num">Máx/Semana</th>
+        <th class="num">Stock Mínimo</th>
+        <th class="num">A Producir</th>
+        <th>Estado</th>
+      </tr></thead>
+      <tbody id="tbody-quevedo-grill"></tbody>
+    </table>
+  </div>
+
+  <!-- DEPÓSITO -->
+  <div class="sec-hdr">
+    <div class="sec-title">Depósito Quevedo</div>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr>
+        <th>Corte (sin armar)</th>
+        <th class="num">Stock Kg/Un</th>
+        <th></th>
+      </tr></thead>
+      <tbody id="tbody-deposito"></tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- ════════════ VIEW: VENTAS ════════════ -->
+<div class="view" id="view-ventas">
+
+  <div class="week-bar">
+    <div>
+      <div class="week-label" id="weekLabel">Semana actual</div>
+      <div style="font-size:11px;color:var(--muted)" id="weekRange"></div>
+    </div>
+    <div class="week-nav">
+      <button class="btn btn-ghost btn-sm" onclick="changeWeek(-1)">◀ Anterior</button>
+      <button class="btn btn-amber btn-sm" onclick="changeWeek(0)">Semana actual</button>
+      <button class="btn btn-ghost btn-sm" onclick="changeWeek(1)">Siguiente ▶</button>
+    </div>
+  </div>
+
+  <div class="sec-hdr"><div class="sec-title">Ventas Grill — ingresá las unidades vendidas</div></div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr>
+        <th>Producto</th>
+        <th class="num">Venta esta semana</th>
+        <th class="num">Prom 6 sem.</th>
+        <th class="num">Máx 6 sem.</th>
+      </tr></thead>
+      <tbody id="tbody-ventas-grill"></tbody>
+    </table>
+  </div>
+
+  <div class="sec-hdr"><div class="sec-title">Ventas Express — ingresá las unidades vendidas</div></div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr>
+        <th>Producto</th>
+        <th class="num">Venta esta semana</th>
+        <th class="num">Prom 6 sem.</th>
+        <th class="num">Máx 6 sem.</th>
+      </tr></thead>
+      <tbody id="tbody-ventas-express"></tbody>
+    </table>
+  </div>
+
+  <div class="sec-hdr"><div class="sec-title">Ventas Quevedo Grill — ingresá las unidades vendidas</div></div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr>
+        <th>Producto</th>
+        <th class="num">Venta esta semana</th>
+        <th class="num">Prom 6 sem.</th>
+        <th class="num">Máx 6 sem.</th>
+      </tr></thead>
+      <tbody id="tbody-ventas-quevedo-grill"></tbody>
+    </table>
+  </div>
+
+  <div style="display:flex;justify-content:flex-end;margin-top:8px">
+    <button class="btn btn-green" onclick="saveVentas()">💾 Guardar ventas de esta semana</button>
+  </div>
+</div>
+
+<!-- ════════════ VIEW: HISTORIAL ════════════ -->
+<div class="view" id="view-historial">
+  <div class="sec-hdr"><div class="sec-title">Historial últimas 6 semanas — Grill</div></div>
+  <div class="tbl-wrap" id="hist-grill"></div>
+  <div class="sec-hdr" style="margin-top:24px"><div class="sec-title">Historial últimas 6 semanas — Express</div></div>
+  <div class="tbl-wrap" id="hist-express"></div>
+  <div class="sec-hdr" style="margin-top:24px"><div class="sec-title">Historial últimas 6 semanas — Quevedo Grill</div></div>
+  <div class="tbl-wrap" id="hist-quevedo-grill"></div>
+</div>
+
+</main>
+
+<!-- MODAL ADD/EDIT PRODUCT -->
+<div class="overlay" id="modalOverlay">
+<div class="modal">
+  <div class="modal-title" id="modalTitle">Nuevo Producto</div>
+  <input type="hidden" id="mId">
+  <div class="form-row">
+    <div class="fg" style="grid-column:1/-1">
+      <label>Nombre del producto *</label>
+      <input id="mName" placeholder="Ej: Arm. Asado Tira 450g x Por">
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="fg">
+      <label>Sucursal *</label>
+      <select id="mSuc">
+        <option value="grill">Grill</option>
+        <option value="express">Express</option>
+        <option value="quevedo-grill">Quevedo Grill</option>
+        <option value="deposito">Depósito</option>
+      </select>
+    </div>
+    <div class="fg">
+      <label>Unidad</label>
+      <select id="mUnit">
+        <option value="Por">Por</option>
+        <option value="Un">Un</option>
+        <option value="kg">kg</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="fg">
+      <label>Stock mínimo</label>
+      <input type="number" id="mMin" placeholder="0" min="0">
+    </div>
+    <div class="fg">
+      <label>Stock actual</label>
+      <input type="number" id="mStock" placeholder="0" min="0">
+    </div>
+  </div>
+  <div class="modal-actions">
+    <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
+    <button class="btn btn-red" onclick="saveProduct()">Guardar</button>
+  </div>
+</div>
+</div>
+
+<!-- MODAL CONFIRM DELETE -->
+<div class="overlay" id="deleteOverlay">
+<div class="modal" style="max-width:360px">
+  <div class="modal-title" style="color:var(--red2)">¿Eliminar producto?</div>
+  <p style="color:var(--muted);font-size:13px;margin-bottom:4px">Esta acción no se puede deshacer.</p>
+  <p style="color:var(--text);font-size:14px;font-weight:600" id="deleteProductName"></p>
+  <div class="modal-actions">
+    <button class="btn btn-ghost" onclick="closeDeleteModal()">Cancelar</button>
+    <button class="btn" style="background:var(--red);color:#fff" onclick="confirmDelete()">Sí, eliminar</button>
+  </div>
+</div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════
+// DATA STRUCTURE
+// products: [{id, name, sucursal, unit, min, stock}]
+// ventas: { 'YYYY-Www': { [productId]: qty } }
+// sucursales: 'grill' | 'express' | 'quevedo-grill' | 'deposito'
+// ═══════════════════════════════════════════
+
+// ── HELPERS (deben ir primero) ────────────
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2) }
+function saveAll(){
+  localStorage.setItem('qv_products', JSON.stringify(products));
+  localStorage.setItem('qv_ventas',   JSON.stringify(ventas));
+}
+
+const SEED_PRODUCTS = () => {
+  const mk = (name, suc, unit, stock) =>
+    ({ id: uid(), name, sucursal: suc, unit, min: 0, stock });
+  return [
+    // SUCURSAL GRILL
+    mk('Arm. Asado Tira 350g x Por',      'grill','Por', 0),
+    mk('Arm. Bife Chorizo 250g x Por',    'grill','Por', 0),
+    mk('Arm. Bondiola Cerdo 250g x Por',  'grill','Por', 0),
+    mk('Arm. Vacío 300g x Por',           'grill','Por', 0),
+    mk('Arm. Ojo de Bife 250g x Por',     'grill','Por', 0),
+    mk('Arm. Lomo Grill 250g x Un',       'grill','Un',  0),
+    // SUCURSAL EXPRESS
+    mk('Arm. Bife Nalga 190g x Un',       'express','Un', 0),
+    mk('Arm. Bife Nalga Sandw 100g x Un', 'express','Un', 0),
+    mk('Arm. Bondiola Bife 180g x Un',    'express','Un', 0),
+    mk('Arm. Lomito Bife 120g x Un',      'express','Un', 0),
+    mk('Arm. Medallón Carne x Un',        'express','Un', 0),
+    // QUEVEDO GRILL
+    mk('Arm. Asado Tira 450g x Por',      'quevedo-grill','Por', 0),
+    mk('Arm. Asado Tira 750g x Por',      'quevedo-grill','Por', 0),
+    mk('Arm. Vacío 500g x Por',           'quevedo-grill','Por', 0),
+    mk('Arm. Vacío 1kg x Por',            'quevedo-grill','Por', 0),
+    mk('Arm. Ojo de Bife 400g x Por',     'quevedo-grill','Por', 0),
+    mk('Arm. Bife Chorizo 350g x Un',     'quevedo-grill','Un',  0),
+    mk('Arm. Vacío 300g x Por',           'quevedo-grill','Por', 0),
+    mk('Arm. Lomo p/Milanesa 100g x Por', 'quevedo-grill','Por', 0),
+    mk('Arm. Lomo Arrollado 300g x Por',  'quevedo-grill','Por', 0),
+    // DEPÓSITO
+    mk('NALGA SIN TRABAJAR',   'deposito','kg', 0),
+    mk('BARRA',                'deposito','kg', 0),
+    mk('VACÍO SIN TRABAJAR',   'deposito','kg', 0),
+    mk('COSTILLA SIN TRABAJAR','deposito','kg', 0),
+  ];
+};
+
+let products = JSON.parse(localStorage.getItem('qv_products') || 'null');
+let ventas   = JSON.parse(localStorage.getItem('qv_ventas')   || '{}');
+
+// ── SEED (solo si no hay datos guardados) ──
+if (!products) {
+  products = SEED_PRODUCTS();
+  saveAll();
+}
+
+// Week key ISO 8601: lunes a domingo "2024-W17"
+function getISOMonday(d){
+  // Returns the Monday of the ISO week containing date d
+  const day = d.getDay(); // 0=Sun,1=Mon,...,6=Sat
+  const diff = (day === 0) ? -6 : 1 - day; // adjust so Monday=0
+  const mon = new Date(d);
+  mon.setDate(d.getDate() + diff);
+  mon.setHours(0,0,0,0);
+  return mon;
+}
+
+function getISOWeekNumber(d){
+  const mon = getISOMonday(d);
+  const jan4 = new Date(mon.getFullYear(), 0, 4); // Jan 4 is always in week 1
+  const startOfW1 = getISOMonday(jan4);
+  const weekNum = Math.round((mon - startOfW1) / (7*86400000)) + 1;
+  // Handle year boundary
+  if(weekNum < 1){
+    // Belongs to last week of previous year
+    const dec28 = new Date(mon.getFullYear()-1, 11, 28);
+    return { y: mon.getFullYear()-1, w: getISOWeekNumber(dec28).w };
+  }
+  if(weekNum > 52){
+    // Check if it's week 1 of next year
+    const jan4Next = new Date(mon.getFullYear()+1, 0, 4);
+    const startW1Next = getISOMonday(jan4Next);
+    if(mon >= startW1Next) return { y: mon.getFullYear()+1, w: 1 };
+  }
+  return { y: mon.getFullYear(), w: weekNum };
+}
+
+function weekKey(offset=0){
+  const d = new Date();
+  d.setDate(d.getDate() + offset*7);
+  const {y, w} = getISOWeekNumber(d);
+  return `${y}-W${String(w).padStart(2,'0')}`;
+}
+
+function weekLabel(key){
+  const [y, wStr] = key.split('-W');
+  const w = parseInt(wStr);
+  // Find Monday of this ISO week
+  const jan4 = new Date(+y, 0, 4);
+  const startOfW1 = getISOMonday(jan4);
+  const mon = new Date(startOfW1.getTime() + (w-1)*7*86400000);
+  const sun = new Date(mon.getTime() + 6*86400000);
+  const fmt = d => d.toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit'});
+  return `Semana ${w} · ${fmt(mon)} al ${fmt(sun)}`;
+}
+
+function getLast6Weeks(){
+  const keys=[];
+  for(let i=5;i>=0;i--) keys.push(weekKey(-i));
+  return keys;
+}
+
+function getWeekSales(productId, wk){
+  return (ventas[wk] && ventas[wk][productId]) ? Number(ventas[wk][productId]) : 0;
+}
+
+function getStats(productId){
+  // Use last 6 ISO weeks by key
+  const weeks = getLast6Weeks();
+  // Also include ANY key stored in ventas that has data for this product
+  // (handles edge case where weekKey generation differs slightly)
+  const allKeys = [...new Set([...weeks, ...Object.keys(ventas)])];
+  const vals = allKeys
+    .map(w => getWeekSales(productId, w))
+    .filter(v => v > 0);
+  if(!vals.length) return {avg:0, max:0, min_suggested:0};
+  const avg = vals.reduce((a,b)=>a+b,0) / vals.length;
+  const max = Math.max(...vals);
+  return {avg: Math.round(avg), max, min_suggested: Math.ceil(avg * 1.5)};
+}
+
+function getStatus(p){
+  const {avg, min_suggested} = getStats(p.id);
+  const minVal = avg > 0 ? min_suggested : (p.min || 0);
+  if(p.stock <= 0) return 'low';
+  if(minVal > 0 && p.stock <= minVal * 0.5) return 'low';
+  if(minVal > 0 && p.stock < minVal) return 'warn';
+  return 'ok';
+}
+
+function getProducir(p){
+  const {avg, min_suggested} = getStats(p.id);
+  const minVal = avg > 0 ? min_suggested : (p.min || 0);
+  // A producir = stock mínimo + promedio − stock actual
+  return Math.max(0, Math.ceil(minVal + avg - p.stock));
+}
+
+function statusBadge(s){
+  if(s==='low') return '<span class="badge badge-low">Crítico</span>';
+  if(s==='warn') return '<span class="badge badge-warn">Atención</span>';
+  return '<span class="badge badge-ok">OK</span>';
+}
+
+function stockBar(p){
+  const {avg, min_suggested} = getStats(p.id);
+  const minVal = avg > 0 ? min_suggested : (p.min || 1);
+  const pct = Math.min(100, Math.round(p.stock / minVal * 100));
+  const color = pct>=100?'#27ae60':pct>=50?'#f39c12':'#e74c3c';
+  return `<div class="stock-bar"><div class="stock-bar-fill" style="width:${pct}%;background:${color}"></div></div>`;
+}
+
+// ── CURRENT WEEK FOR VENTAS VIEW ──────────
+let currentWeekOffset = 0;
+
+// ── RENDER KPIs ──────────────────────────
+function renderKPIs(){
+  const all = products.filter(p=>p.sucursal!=='deposito');
+  const low = all.filter(p=>getStatus(p)==='low').length;
+  const warn = all.filter(p=>getStatus(p)==='warn').length;
+  const totalStock = all.reduce((a,p)=>a+p.stock,0);
+  const toProducir = all.reduce((a,p)=>a+getProducir(p),0);
+  const cats = [...new Set(products.filter(p=>p.sucursal==='express').map(p=>p.name))].length;
+
+  document.getElementById('kpis').innerHTML = `
+    <div class="kpi"><div class="kpi-accent"></div><div class="kpi-label">Productos</div><div class="kpi-val">${all.length}</div><div class="kpi-sub">en sucursales</div></div>
+    <div class="kpi"><div class="kpi-accent" style="background:var(--red2)"></div><div class="kpi-label">Stock Crítico</div><div class="kpi-val" style="color:#e74c3c">${low}</div><div class="kpi-sub">bajo mínimo</div></div>
+    <div class="kpi"><div class="kpi-accent" style="background:var(--amber)"></div><div class="kpi-label">Atención</div><div class="kpi-val" style="color:#f39c12">${warn}</div><div class="kpi-sub">por debajo del objetivo</div></div>
+    <div class="kpi"><div class="kpi-accent" style="background:var(--blue)"></div><div class="kpi-label">Stock Total</div><div class="kpi-val" style="color:var(--accent2)">${totalStock.toLocaleString('es-AR')}</div><div class="kpi-sub">unidades/porciones</div></div>
+    <div class="kpi"><div class="kpi-accent" style="background:var(--green)"></div><div class="kpi-label">A Producir</div><div class="kpi-val" style="color:#27ae60">${toProducir.toLocaleString('es-AR')}</div><div class="kpi-sub">unidades sugeridas</div></div>
+  `;
+}
+
+// ── RENDER STOCK TABLE ────────────────────
+function renderStockTable(suc, tbodyId){
+  const rows = products.filter(p=>p.sucursal===suc);
+  const tbody = document.getElementById(tbodyId);
+  if(!rows.length){ tbody.innerHTML=`<tr><td colspan="8" style="text-align:center;padding:24px;color:var(--muted)">Sin productos</td></tr>`; return; }
+
+  tbody.innerHTML = rows.map(p => {
+    const {avg,max,min_suggested} = getStats(p.id);
+    const minVal = avg > 0 ? min_suggested : (p.min || 0);
+    const prod = getProducir(p);
+    const s = getStatus(p);
+    const prodClass = prod===0?'ok':prod>50?'high':'mid';
+
+    return `<tr>
+      <td>
+        <div class="product-name">${p.name}</div>
+        <div style="display:flex;gap:4px;margin-top:4px">
+          <button class="btn btn-ghost btn-xs" onclick="editProduct('${p.id}')">✏ Editar</button>
+          <button class="btn btn-xs" style="background:transparent;border:1px solid var(--red);color:var(--red2)" onclick="askDelete('${p.id}')">✕ Eliminar</button>
+        </div>
+      </td>
+      <td class="num">
+        ${stockBar(p)}
+        <input class="qty-input" data-id="${p.id}" value="${p.stock}" onchange="markChanged(this)" style="width:70px">
+      </td>
+      <td class="num" style="color:var(--accent)">${avg||'—'}</td>
+      <td class="num" style="color:#5dade2">${max||'—'}</td>
+      <td class="num" style="color:var(--muted)">${minVal||'—'}</td>
+      <td class="num"><span class="producir-cell ${prodClass}">${prod||'✓'}</span></td>
+      <td>${statusBadge(s)}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderDepositoTable(){
+  const rows = products.filter(p=>p.sucursal==='deposito');
+  const tbody = document.getElementById('tbody-deposito');
+  tbody.innerHTML = rows.map(p=>`<tr>
+    <td>
+      <div class="product-name">${p.name}</div>
+      <div style="display:flex;gap:4px;margin-top:4px">
+        <button class="btn btn-ghost btn-xs" onclick="editProduct('${p.id}')">✏ Editar</button>
+        <button class="btn btn-xs" style="background:transparent;border:1px solid var(--red);color:var(--red2)" onclick="askDelete('${p.id}')">✕ Eliminar</button>
+      </div>
+    </td>
+    <td class="num">
+      <input class="qty-input" data-id="${p.id}" value="${p.stock}" onchange="markChanged(this)" style="width:80px"> ${p.unit}
+    </td>
+  </tr>`).join('');
+}
+
+function markChanged(el){ el.classList.add('changed') }
+
+function saveAllStock(){
+  document.querySelectorAll('.qty-input').forEach(el=>{
+    const p = products.find(x=>x.id===el.dataset.id);
+    if(p){ p.stock = parseFloat(el.value)||0; el.classList.remove('changed'); }
+  });
+  saveAll(); renderKPIs(); renderAlerts();
+  renderStockTable('grill','tbody-grill');
+  renderStockTable('express','tbody-express');
+  renderStockTable('quevedo-grill','tbody-quevedo-grill');
+  alert('✅ Stock guardado correctamente.');
+}
+
+// ── RENDER ALERTS ─────────────────────────
+function renderAlerts(){
+  const critical = products.filter(p=>p.sucursal!=='deposito' && getStatus(p)==='low');
+  const bar = document.getElementById('alertBar');
+  if(critical.length){
+    bar.style.display='flex';
+    bar.innerHTML = `⚠ Stock crítico en ${critical.length} producto(s): ${critical.slice(0,4).map(p=>p.name.split(' ').slice(0,3).join(' ')).join(', ')}${critical.length>4?'…':''}`;
+  } else { bar.style.display='none'; }
+}
+
+// ── RENDER VENTAS VIEW ────────────────────
+function renderVentasView(){
+  const wk = weekKey(currentWeekOffset);
+  document.getElementById('weekLabel').textContent = weekLabel(wk);
+  document.getElementById('weekRange').textContent = currentWeekOffset===0?'Semana actual':currentWeekOffset<0?`Hace ${Math.abs(currentWeekOffset)} semana(s)`:`En ${currentWeekOffset} semana(s)`;
+
+  ['grill','express','quevedo-grill'].forEach(suc=>{
+    const rows = products.filter(p=>p.sucursal===suc);
+    const tbId = `tbody-ventas-${suc}`;
+    const tb = document.getElementById(tbId);
+    const {avg,max} = {avg:0,max:0};
+    tb.innerHTML = rows.map(p=>{
+      const cur = getWeekSales(p.id, wk);
+      const st = getStats(p.id);
+      return `<tr>
+        <td class="product-name">${p.name}</td>
+        <td class="num">
+          <input class="qty-input" data-id="${p.id}" data-wk="${wk}" value="${cur||''}" placeholder="0" style="width:90px">
+        </td>
+        <td class="num" style="color:var(--accent)">${st.avg||'—'}</td>
+        <td class="num" style="color:#5dade2">${st.max||'—'}</td>
+      </tr>`;
+    }).join('');
+  });
+}
+
+function changeWeek(dir){
+  if(dir===0) currentWeekOffset=0;
+  else currentWeekOffset+=dir;
+  renderVentasView();
+}
+
+function saveVentas(){
+  const wk = weekKey(currentWeekOffset);
+  if(!ventas[wk]) ventas[wk]={};
+  document.querySelectorAll(`[data-wk="${wk}"]`).forEach(el=>{
+    const v = parseFloat(el.value);
+    if(!isNaN(v) && v>0) ventas[wk][el.dataset.id]=v;
+    else delete ventas[wk][el.dataset.id];
+  });
+  saveAll();
+  renderKPIs();
+  renderStockTable('grill','tbody-grill');
+  renderStockTable('express','tbody-express');
+  renderStockTable('quevedo-grill','tbody-quevedo-grill');
+  renderVentasView();
+  renderHistorial();
+  alert('✅ Ventas guardadas. Los promedios y máximos se actualizaron.');
+}
+
+// ── RENDER HISTORIAL ──────────────────────
+function renderHistorial(){
+  const weeks = getLast6Weeks();
+  ['grill','express','quevedo-grill'].forEach(suc=>{
+    const rows = products.filter(p=>p.sucursal===suc);
+    const container = document.getElementById(`hist-${suc}`);
+    const cols = 2+weeks.length+2; // name + 6 weeks + avg + max
+    let html = `<div style="overflow-x:auto"><table style="width:100%"><thead><tr>
+      <th>Producto</th>
+      ${weeks.map((w,i)=>`<th class="num" style="${i===weeks.length-1?'color:var(--accent)':''}">${w.split('-W')[1] ? 'Sem '+w.split('-W')[1] : w}</th>`).join('')}
+      <th class="num" style="color:var(--accent2)">Promedio</th>
+      <th class="num" style="color:#5dade2">Máximo</th>
+    </tr></thead><tbody>`;
+
+    html += rows.map(p=>{
+      const vals = weeks.map(w=>getWeekSales(p.id,w));
+      const nonzero = vals.filter(v=>v>0);
+      const avg = nonzero.length ? Math.round(nonzero.reduce((a,b)=>a+b,0)/nonzero.length) : 0;
+      const max = nonzero.length ? Math.max(...nonzero) : 0;
+      return `<tr>
+        <td class="product-name" style="padding:8px 12px">${p.name}</td>
+        ${vals.map((v,i)=>`<td class="num" style="padding:8px 12px;${i===vals.length-1?'color:var(--accent)':''}">${v||'—'}</td>`).join('')}
+        <td class="num" style="padding:8px 12px;color:var(--accent2);font-weight:700">${avg||'—'}</td>
+        <td class="num" style="padding:8px 12px;color:#5dade2;font-weight:700">${max||'—'}</td>
+      </tr>`;
+    }).join('');
+    html += '</tbody></table></div>';
+    container.innerHTML = html;
+  });
+}
+
+function resetProducts(){
+  if(!confirm('⚠️ Esto va a reemplazar TODOS los productos con la lista oficial.\n\nLas ventas históricas se conservan.\n\n¿Confirmar?')) return;
+  products = SEED_PRODUCTS();
+  saveAll();
+  renderAll();
+  alert('✅ Productos reseteados. Ahora ingresá el stock actual de cada uno y guardá.');
+}
+function openAddModal(){ openAddModalSuc('grill'); }
+function openAddModalSuc(suc){
+  document.getElementById('mId').value='';
+  document.getElementById('mName').value='';
+  document.getElementById('mSuc').value= suc || 'grill';
+  document.getElementById('mUnit').value='Por';
+  document.getElementById('mMin').value='';
+  document.getElementById('mStock').value='';
+  document.getElementById('modalTitle').textContent='Nuevo Producto';
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function editProduct(id){
+  const p = products.find(x=>x.id===id);
+  if(!p) return;
+  document.getElementById('mId').value=p.id;
+  document.getElementById('mName').value=p.name;
+  document.getElementById('mSuc').value=p.sucursal;
+  document.getElementById('mUnit').value=p.unit;
+  document.getElementById('mMin').value=p.min||'';
+  document.getElementById('mStock').value=p.stock||'';
+  document.getElementById('modalTitle').textContent='Editar Producto';
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal(){ document.getElementById('modalOverlay').classList.remove('open') }
+
+let deleteTargetId = null;
+function askDelete(id){
+  const p = products.find(x=>x.id===id);
+  if(!p) return;
+  deleteTargetId = id;
+  document.getElementById('deleteProductName').textContent = p.name;
+  document.getElementById('deleteOverlay').classList.add('open');
+}
+function closeDeleteModal(){ document.getElementById('deleteOverlay').classList.remove('open'); deleteTargetId=null; }
+function confirmDelete(){
+  if(!deleteTargetId) return;
+  products = products.filter(p=>p.id!==deleteTargetId);
+  saveAll(); closeDeleteModal(); renderAll();
+}
+
+function saveProduct(){
+  const name = document.getElementById('mName').value.trim();
+  if(!name){ alert('El nombre es obligatorio.'); return; }
+  const id = document.getElementById('mId').value;
+  const data = {
+    name,
+    sucursal: document.getElementById('mSuc').value,
+    unit:     document.getElementById('mUnit').value,
+    min:      parseFloat(document.getElementById('mMin').value)||0,
+    stock:    parseFloat(document.getElementById('mStock').value)||0,
+  };
+  if(id){
+    const idx = products.findIndex(p=>p.id===id);
+    if(idx>=0) products[idx]={...products[idx],...data};
+  } else {
+    products.push({id:uid(),...data});
+  }
+  saveAll(); closeModal(); renderAll();
+}
+
+// ── EXPORT ───────────────────────────────
+function exportCSV(){
+  const weeks = getLast6Weeks();
+  const header = ['Producto','Sucursal','Unidad','Stock','StockMin',...weeks.map(w=>'Sem_'+w.split('-W')[1]),'Promedio','Maximo','AProducir'];
+  const rows = products.map(p=>{
+    const vals = weeks.map(w=>getWeekSales(p.id,w));
+    const nz = vals.filter(v=>v>0);
+    const avg = nz.length?Math.round(nz.reduce((a,b)=>a+b,0)/nz.length):0;
+    const max = nz.length?Math.max(...nz):0;
+    return [p.name,p.sucursal,p.unit,p.stock,p.min,...vals,avg,max,getProducir(p)];
+  });
+  const csv = [header,...rows].map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);
+  a.download='quevedo_stock_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+}
+
+// ── VIEW SWITCHING ────────────────────────
+function showView(name, el){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if(name==='ventas') renderVentasView();
+  if(name==='historial') renderHistorial();
+}
+
+// ── FULL RENDER ──────────────────────────
+function renderAll(){
+  renderKPIs();
+  renderAlerts();
+  renderStockTable('grill','tbody-grill');
+  renderStockTable('express','tbody-express');
+  renderStockTable('quevedo-grill','tbody-quevedo-grill');
+  renderDepositoTable();
+}
+
+// ── INIT ─────────────────────────────────
+renderAll();
+</script>
+</body>
+</html>
